@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>티링크 비즈레코딩 AI 홍보 콘텐츠 공장</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#1f2430; --sub:#6b7280;
+    --line:#e5e7eb; --brand:#2f5dff; --brand-weak:#eef1ff;
+    --ok:#1a9d6f; --warn:#d97706; --bad:#dc2626;
+    --radius:14px; --shadow:0 2px 10px rgba(20,25,40,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+  header{background:linear-gradient(135deg,#1f2a56,#2f5dff);color:#fff;padding:22px 24px;}
+  header h1{margin:0;font-size:20px}
+  header p{margin:6px 0 0;font-size:13px;opacity:.85}
+  .wrap{max-width:1180px;margin:0 auto;padding:18px 20px 60px}
+  nav.tabs{display:flex;gap:6px;margin:16px 0;flex-wrap:wrap}
+  nav.tabs button{border:1px solid var(--line);background:#fff;padding:9px 16px;border-radius:999px;cursor:pointer;font-size:13.5px;color:var(--sub);font-weight:600}
+  nav.tabs button.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+  section.panel{display:none}
+  section.panel.active{display:block}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:860px){.g2,.g3{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 10px;font-size:15px}
+  .card h3 small{color:var(--sub);font-weight:400;font-size:12px}
+  label{display:block;font-size:12.5px;color:var(--sub);margin:10px 0 4px;font-weight:600}
+  input[type=text],input[type=number],input[type=date],select,textarea{
+    width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:9px;font-size:13.5px;font-family:inherit;background:#fcfcfe}
+  textarea{resize:vertical}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  .row > *{flex:1}
+  .btn{display:inline-flex;align-items:center;gap:6px;border:none;background:var(--brand);color:#fff;padding:9px 14px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600}
+  .btn.secondary{background:#fff;color:var(--brand);border:1px solid var(--brand)}
+  .btn.ghost{background:transparent;color:var(--sub);border:1px solid var(--line)}
+  .btn.danger{background:#fff;color:var(--bad);border:1px solid #fca5a5}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .pill{display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:999px;background:var(--brand-weak);color:var(--brand);font-weight:700;margin-right:4px}
+  .pill.ok{background:#e7f8f0;color:var(--ok)}
+  .pill.warn{background:#fef3e2;color:var(--warn)}
+  .pill.bad{background:#fdeaea;color:var(--bad)}
+  .msg-card{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fafbff}
+  .msg-card .mc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .msg-card strong{font-size:14px}
+  .msg-card .mc-meta{font-size:12px;color:var(--sub);margin-top:4px;line-height:1.5}
+  .check{display:flex;align-items:center;gap:6px;font-size:13px;padding:5px 0}
+  .check input{width:auto}
+  .kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:900px){.kanban{grid-template-columns:1fr}}
+  .kcol{background:#f0f2f8;border-radius:12px;padding:10px;min-height:120px}
+  .kcol h4{margin:4px 6px 10px;font-size:13px;color:var(--sub)}
+  .kcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;box-shadow:var(--shadow)}
+  .kcard .kt{font-size:13px;font-weight:700;margin-bottom:4px}
+  .kcard .km{font-size:11.5px;color:var(--sub)}
+  .kcard .kbtns{display:flex;gap:4px;margin-top:8px}
+  .kcard .kbtns button{font-size:11px;padding:4px 7px;border-radius:7px;border:1px solid var(--line);background:#fff;cursor:pointer}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  table th,table td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left}
+  table th{color:var(--sub);font-weight:600;font-size:12px}
+  .stat{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
+  .stat .box{flex:1;min-width:120px;background:#fafbff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .stat .box .v{font-size:20px;font-weight:800;color:var(--brand)}
+  .stat .box .l{font-size:11.5px;color:var(--sub)}
+  .bar-wrap{display:flex;align-items:center;gap:10px;margin:8px 0}
+  .bar-label{width:110px;font-size:12px;color:var(--sub)}
+  .bar-track{flex:1;background:#eef1f6;border-radius:6px;height:14px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:6px}
+  footer.hint{font-size:12px;color:var(--sub);margin-top:6px;line-height:1.6}
+  .toast{position:fixed;bottom:18px;right:18px;background:#1f2430;color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.2);opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateY(0)}
+  .empty{color:var(--sub);font-size:13px;padding:14px 6px}
+  .flexend{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+  .small{font-size:11.5px;color:var(--sub)}
+  .divider{height:1px;background:var(--line);margin:14px 0}
+  .badge-list span{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:7px;padding:4px 8px;font-size:12px;margin:3px 4px 0 0}
+</style>
+</head>
+<body>
+<header>
+  <h1>🔗 티링크 비즈레코딩 — AI 홍보 콘텐츠 공장</h1>
+  <p>제안서·매뉴얼·화면 사진만 넣으면 AI가 차별점을 메시지 카드로 정리하고, 채널별 콘텐츠 초안과 가이드라인 점검, 캠페인 성과 관리까지 한 보드에서 처리합니다.</p>
+</header>
+<div class="wrap">
+  <nav class="tabs" id="tabs">
+    <button data-tab="cards" class="active">① 차별점 메시지 카드</button>
+    <button data-tab="content">② 콘텐츠 생성 + 가이드라인 점검</button>
+    <button data-tab="board">③ 캠페인 보드</button>
+    <button data-tab="report">④ 성과 리포트</button>
+    <button data-tab="data">⑤ AI 연결 · 백업</button>
+  </nav>
+
+  <!-- ① 메시지 카드 -->
+  <section class="panel active" id="panel-cards">
+    <div class="card" style="margin-bottom:14px">
+      <h3>AI 차별점 분석 <small>제품 정보와 현장·화면 사진을 넣으면 AI가 메시지 카드로 정리합니다</small> <span class="pill" id="ai-status-1"></span></h3>
+      <div class="grid g2">
+        <div>
+          <label>제품 정보 (제안서·매뉴얼·회사소개서 내용을 붙여넣기)</label>
+          <textarea id="an-text" rows="7" placeholder="예: 티링크 비즈레코딩은 휴대폰·인터넷전화·PC폰 통화를 한 서버에 함께 녹음하고, STT로 받아쓴 뒤 AI가 요약과 종합리포트를 만듭니다. (제안서 4쪽) ..."></textarea>
+        </div>
+        <div>
+          <label>현장 사진 · 화면 캡처 (여러 장 가능)</label>
+          <input type="file" id="an-photos" accept="image/*" multiple onchange="loadPhotos(event)">
+          <div id="an-thumbs" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div>
+          <label>사진 설명 (선택 — 어떤 화면·현장인지 적으면 판독이 정확해집니다)</label>
+          <input type="text" id="an-photo-note" placeholder="예: 1번 통화 녹음 목록 화면, 2번 고객사 구축 현장">
+        </div>
+      </div>
+      <div class="flexend">
+        <button class="btn ghost" onclick="fillSample()">예시 자료 넣기</button>
+        <button class="btn" id="an-btn" onclick="analyzeMaterials()">AI로 차별점 분석</button>
+      </div>
+      <footer class="hint">AI는 넣은 자료와 사진에 있는 내용만 카드로 만들고, 카드마다 근거 위치를 적습니다. 사진은 저장되지 않고 이번 작업에만 쓰입니다.</footer>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>메시지 카드 추가 <small>기능 → 고객 이익 → 근거 자료</small></h3>
+        <label>기능 (제품이 실제로 하는 것)</label>
+        <input type="text" id="mc-feature" placeholder="예: 휴대폰+인터넷전화+PC폰 통합 녹취">
+        <label>고객 이익 (그래서 고객이 얻는 것)</label>
+        <input type="text" id="mc-benefit" placeholder="예: 외근 통화까지 고객별 하나의 이력으로 관리">
+        <label>근거 자료 (어느 자료·몇 쪽·어느 화면)</label>
+        <input type="text" id="mc-evidence" placeholder="예: 제안서 4쪽 '통합녹취 아키텍처' / 화면캡처_통화목록.png">
+        <div class="flexend">
+          <button class="btn" onclick="addMessageCard()">카드 추가</button>
+        </div>
+        <footer class="hint">근거 자료를 꼭 적어야 합니다 — 콘텐츠 생성 시 "근거 없는 문장"을 자동으로 표시하는 기준이 됩니다. (3사 피드백: 근거 기반 검증 구체화)</footer>
+      </div>
+      <div class="card">
+        <h3>메시지 카드 목록 <small id="mc-count"></small></h3>
+        <div id="mc-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 콘텐츠 생성 -->
+  <section class="panel" id="panel-content">
+    <div class="grid g2">
+      <div class="card">
+        <h3>1. 콘텐츠 만들기 <span class="pill" id="ai-status-2"></span></h3>
+        <label>채널</label>
+        <select id="ct-channel">
+          <option value="blog">블로그 리뷰</option>
+          <option value="short">숏폼 대본</option>
+          <option value="card">카드뉴스 문구</option>
+          <option value="ad">검색광고 문안</option>
+        </select>
+        <label>사용할 메시지 카드 (여러 개 선택 가능)</label>
+        <div id="ct-card-pick" class="badge-list"></div>
+        <label>캠페인명 (성과 집계 묶음 단위)</label>
+        <input type="text" id="ct-campaign" placeholder="예: 2026-11 체험단 리뷰">
+        <label class="check"><input type="checkbox" id="ct-use-photos" checked> ①에 올린 사진도 함께 보고 쓰기</label>
+        <div class="flexend">
+          <button class="btn" id="ct-btn" onclick="generateDraft()">AI 초안 생성</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>2. 가이드라인 설정 <small>필수 키워드 · 강조 내용</small></h3>
+        <label>필수 키워드 (쉼표로 구분)</label>
+        <input type="text" id="gl-keywords" value="통화요약, 콜센터 프로그램, 업무자동화">
+        <label>강조 내용 11개 (한 줄에 하나씩, 필요시 수정)</label>
+        <textarea id="gl-highlights" rows="6">휴대폰·인터넷전화·PC폰 통합 녹취
+STT 통화 요약
+AI 종합리포트
+AES256 암호화
+사용자별 접근권한
+직원별 통계
+일일 보고서 자동화
+외근 통화 이력 통합
+고객별 통화 이력 관리
+도입 후 업무시간 절감
+콜센터 프로그램 연동</textarea>
+        <footer class="hint">※ 1단계 자료 기준 필수 키워드 3개만 확정돼 있어 강조 내용 11개는 예시로 채웠습니다. 실제 리뷰 가이드라인 문서 기준으로 그대로 바꿔 넣으면 됩니다.</footer>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <h3>3. 생성 결과 + 가이드라인 점검</h3>
+      <textarea id="ct-output" rows="8" placeholder="초안이 여기에 생성됩니다."></textarea>
+      <div id="ct-check"></div>
+      <div class="flexend">
+        <button class="btn secondary" onclick="copyDraft()">복사</button>
+        <button class="btn" onclick="saveContent()">콘텐츠 등록 → 캠페인 보드로 보내기</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <h3>검수 시간 비교 (시연 지표)</h3>
+      <div class="row">
+        <div><label>기존 수작업 검수 시간 (분/편)</label><input type="number" id="time-before" value="30"></div>
+        <div><label>MVP 사용 후 검수 시간 (분/편)</label><input type="number" id="time-after" value="5"></div>
+      </div>
+      <div class="stat">
+        <div class="box"><div class="v" id="time-saved">-</div><div class="l">편당 절감 시간(분)</div></div>
+        <div class="box"><div class="v" id="time-pct">-</div><div class="l">절감률</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ 캠페인 보드 -->
+  <section class="panel" id="panel-board">
+    <div class="card">
+      <h3>캠페인 칸반 보드 <small>기획 → 제작 → 검수 → 게시완료</small></h3>
+      <div class="row" style="margin-bottom:10px">
+        <input type="text" id="kb-title" placeholder="새 콘텐츠 작업 제목 (수동 추가)">
+        <input type="text" id="kb-campaign" placeholder="캠페인명">
+        <select id="kb-channel">
+          <option value="blog">블로그 리뷰</option>
+          <option value="short">숏폼 대본</option>
+          <option value="card">카드뉴스</option>
+          <option value="ad">검색광고</option>
+        </select>
+        <button class="btn" style="flex:0 0 auto" onclick="addKanbanManual()">추가</button>
+      </div>
+      <div class="kanban" id="kanban"></div>
+    </div>
+  </section>
+
+  <!-- ④ 성과 리포트 -->
+  <section class="panel" id="panel-report">
+    <div class="grid g2">
+      <div class="card">
+        <h3>캠페인 성과 입력</h3>
+        <label>캠페인 선택</label>
+        <select id="rp-campaign"></select>
+        <div class="row">
+          <div><label>광고비(원)</label><input type="number" id="rp-budget" value="0"></div>
+          <div><label>노출</label><input type="number" id="rp-impr" value="0"></div>
+          <div><label>클릭</label><input type="number" id="rp-click" value="0"></div>
+        </div>
+        <div class="flexend"><button class="btn" onclick="saveCampaignPerf()">저장</button></div>
+      </div>
+      <div class="card">
+        <h3>문의 기록 (성과 귀속)</h3>
+        <label>날짜</label><input type="date" id="iq-date">
+        <label>유입경로 / UTM</label>
+        <select id="iq-utm"></select>
+        <label>연결 콘텐츠</label>
+        <select id="iq-content"></select>
+        <label>비고</label><input type="text" id="iq-note" placeholder="예: 대표번호 상담 문의 / 홈페이지 상담신청">
+        <div class="flexend"><button class="btn" onclick="addInquiry()">문의 등록</button></div>
+        <footer class="hint">유입경로를 특정할 수 없는 문의는 "출처 미확인"으로 등록하세요 — 리포트에서 따로 분리해 신뢰도를 지킵니다. (OpenAI 피드백)</footer>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <h3>캠페인별 문의 1건당 비용</h3>
+      <table id="rp-table"><thead><tr><th>캠페인</th><th>채널</th><th>광고비</th><th>노출</th><th>클릭</th><th>문의수</th><th>문의1건당비용</th><th>UTM</th></tr></thead><tbody></tbody></table>
+      <div class="flexend"><button class="btn ghost" onclick="exportCampaignCSV()">캠페인 CSV 내보내기</button><button class="btn ghost" onclick="exportInquiryCSV()">문의 CSV 내보내기</button></div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <h3>채널별 효율 비교</h3>
+      <div id="rp-bars"></div>
+      <p class="small">출처 미확인 문의: <span id="rp-unknown">0</span>건</p>
+    </div>
+  </section>
+
+  <!-- ⑤ 데이터 백업 -->
+  <section class="panel" id="panel-data">
+    <div class="card" style="margin-bottom:14px">
+      <h3>AI 연결</h3>
+      <p class="small" id="ai-mode-note"></p>
+      <div class="row">
+        <div><label>Claude API 키</label><input type="text" id="ai-key" placeholder="sk-ant-..." autocomplete="off"></div>
+        <div><label>모델</label><input type="text" id="ai-model" value="claude-sonnet-5"></div>
+      </div>
+      <div class="flexend">
+        <button class="btn ghost" onclick="clearKey()">키 지우기</button>
+        <button class="btn" onclick="saveKey()">저장</button>
+      </div>
+      <footer class="hint">키는 이 브라우저에만 저장되고, 요청은 내 브라우저에서 Anthropic으로 직접 갑니다. 백업 파일에는 키가 들어가지 않습니다. 키가 없으면 "예시 모드"로 동작해 정해진 문구 틀로 초안을 만듭니다(AI 분석 아님).</footer>
+    </div>
+    <div class="card">
+      <h3>데이터 백업 / 복원</h3>
+      <p class="small">이 페이지는 브라우저 저장소(localStorage)에 자동 저장되지만, 새로고침·다른 기기 이동 시 유실될 수 있습니다 (Claude 아티팩트 저장 한계 — Gemini·OpenAI 피드백). 발표 전후로 꼭 JSON 백업을 받아두세요.</p>
+      <div class="flexend">
+        <button class="btn" onclick="backupJSON()">전체 데이터 백업 (JSON 다운로드)</button>
+        <label class="btn secondary" style="cursor:pointer">
+          백업 파일 불러오기 <input type="file" accept=".json" style="display:none" onchange="restoreJSON(event)">
+        </label>
+        <button class="btn danger" onclick="resetAll()">전체 초기화</button>
+      </div>
+      <div class="divider"></div>
+      <h3>범용 확장 안내</h3>
+      <p class="small">제품명(①) · 가이드라인 키워드/강조 내용(②) · 캠페인 채널만 바꾸면 티링크노트나 다른 중소 B2B 기업의 홍보 콘텐츠 제작에도 그대로 쓸 수 있는 구조입니다. (3사 공통 피드백: 확장성)</p>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- state ---------- */
+const STORE_KEY = 'tilink_factory_v1';
+let state = {
+  cards: [],
+  contents: [],
+  kanban: [],
+  campaigns: {}, // name -> {budget,impr,click}
+  inquiries: []
+};
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw) state = Object.assign(state, JSON.parse(raw));
+  }catch(e){ console.warn('load failed', e); }
+  if(!state.cards.length){
+    state.cards = [
+      {id:cid(),feature:'휴대폰+인터넷전화+PC폰 통합 녹취',benefit:'외근 통화까지 고객별 하나의 이력으로 관리',evidence:'(예시) 제안서 — 실제 쪽수로 바꿔주세요'},
+      {id:cid(),feature:'AI 종합리포트 자동 생성',benefit:'통화 메모·일일 보고서 작성 시간 절감',evidence:'(예시) 매뉴얼 — 실제 쪽수로 바꿔주세요'},
+      {id:cid(),feature:'AES256 암호화 + 사용자별 접근권한',benefit:'기업 통화정보 보호, 보안 심사 통과',evidence:'(예시) 제안서 — 실제 쪽수로 바꿔주세요'}
+    ];
+  }
+  render();
+}
+function save(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){ toast('저장 공간 부족 — JSON 백업을 받아주세요'); }
+}
+function cid(){ return 'c'+Math.random().toString(36).slice(2,9); }
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ---------- tabs ---------- */
+document.getElementById('tabs').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  document.querySelectorAll('section.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+b.dataset.tab).classList.add('active');
+  if(b.dataset.tab==='report') renderReport();
+  if(b.dataset.tab==='content') renderCardPicker();
+});
+
+/* ---------- message cards ---------- */
+function addMessageCard(){
+  const feature=val('mc-feature'), benefit=val('mc-benefit'), evidence=val('mc-evidence');
+  if(!feature||!benefit||!evidence){ toast('기능·고객이익·근거자료를 모두 입력해주세요'); return; }
+  state.cards.push({id:cid(),feature,benefit,evidence});
+  ['mc-feature','mc-benefit','mc-evidence'].forEach(id=>document.getElementById(id).value='');
+  save(); render();
+  toast('메시지 카드를 추가했습니다');
+}
+function deleteCard(id){
+  state.cards = state.cards.filter(c=>c.id!==id);
+  save(); render();
+}
+function val(id){ return document.getElementById(id).value.trim(); }
+
+function renderCards(){
+  const list=document.getElementById('mc-list');
+  document.getElementById('mc-count').textContent = '('+state.cards.length+'개)';
+  if(!state.cards.length){ list.innerHTML='<div class="empty">아직 카드가 없습니다.</div>'; return; }
+  list.innerHTML = state.cards.map(c=>`
+    <div class="msg-card">
+      <div class="mc-top">
+        <strong>${esc(c.feature)}</strong>
+        <button class="btn ghost" style="padding:4px 8px;font-size:11px" onclick="deleteCard('${c.id}')">삭제</button>
+      </div>
+      <div class="mc-meta">→ 고객 이익: ${esc(c.benefit)}<br>→ 근거: ${esc(c.evidence)}</div>
+    </div>`).join('');
+}
+
+function renderCardPicker(){
+  const box=document.getElementById('ct-card-pick');
+  if(!state.cards.length){ box.innerHTML='<span class="small">먼저 ①에서 메시지 카드를 만들어주세요</span>'; return; }
+  box.innerHTML = state.cards.map(c=>`
+    <label style="cursor:pointer"><input type="checkbox" value="${c.id}" class="ct-pick" style="width:auto;margin-right:4px">${esc(c.feature)}</label>`).join('');
+}
+
+/* ---------- content generation ---------- */
+const CHANNEL_LABEL={blog:'블로그 리뷰',short:'숏폼 대본',card:'카드뉴스 문구',ad:'검색광고 문안'};
+
+/* ---------- AI 연결 ---------- */
+const KEY_STORE='tilink_factory_key', MODEL_STORE='tilink_factory_model';
+let photos=[]; // {data(base64 jpeg), name} — 메모리에만 보관
+let sampler=null, saver=null, platformChecked=false;
+(async()=>{
+  try{
+    if(window.claude && window.claude.use){
+      sampler = await window.claude.use('sample');
+      saver = await window.claude.use('downloads');
+    }
+  }catch(e){}
+  platformChecked=true;
+  try{ renderAiStatus(); }catch(e){}
+})();
+function aiReady(){ return !!sampler || !!getKey(); }
+async function askAI(system, text, useImages, maxTokens){
+  if(sampler){
+    const opts={modelTier:'default',cache:false};
+    if(useImages && photos.length){
+      let ok=false; try{ ok=!!(await sampler.limits()).images; }catch(e){}
+      if(ok) opts.images=photos.map(p=>p.blob).filter(Boolean);
+      else text+='\n\n(참고: 이 화면에서는 사진을 AI에 전달할 수 없어 글 자료만 사용했습니다.)';
+    }
+    try{
+      const r=await sampler(system+'\n\n'+text, opts);
+      return (r.text||'').trim();
+    }catch(err){
+      const m={not_granted:'AI 사용이 허용되지 않았습니다',rate_limited:'요청이 많습니다. 잠시 뒤 다시 눌러주세요'};
+      throw new Error(m[err&&err.code]||(err&&err.message)||'AI 요청 실패');
+    }
+  }
+  const content=[...(useImages?photoBlocks():[]),{type:'text',text}];
+  return callClaude(system,content,maxTokens);
+}
+function getKey(){ try{ return localStorage.getItem(KEY_STORE)||''; }catch(e){ return ''; } }
+function getModel(){ try{ return localStorage.getItem(MODEL_STORE)||'claude-sonnet-5'; }catch(e){ return 'claude-sonnet-5'; } }
+function saveKey(){
+  try{
+    localStorage.setItem(KEY_STORE, val('ai-key'));
+    localStorage.setItem(MODEL_STORE, val('ai-model')||'claude-sonnet-5');
+  }catch(e){}
+  renderAiStatus(); toast('AI 연결 설정을 저장했습니다');
+}
+function clearKey(){
+  try{ localStorage.removeItem(KEY_STORE); }catch(e){}
+  document.getElementById('ai-key').value=''; renderAiStatus(); toast('키를 지웠습니다');
+}
+function renderAiStatus(){
+  const on=aiReady();
+  const note=document.getElementById('ai-mode-note');
+  if(note) note.textContent = sampler ? '지금은 Claude에 바로 연결돼 있어 API 키 없이 동작합니다. (처음 한 번 사용 동의 창이 뜹니다)' : (getKey() ? '저장된 API 키로 동작 중입니다.' : '연결된 AI가 없습니다. 아래에 API 키를 넣으면 실제 AI로 동작합니다.');
+  ['ai-status-1','ai-status-2'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.textContent = sampler ? 'AI 연결됨 (Claude)' : (on ? 'AI 연결됨 (내 키)' : '예시 모드 (⑤에서 키 입력)');
+    el.className = 'pill '+(on?'ok':'warn');
+  });
+  document.getElementById('ai-key').value=getKey();
+  document.getElementById('ai-model').value=getModel();
+}
+async function callClaude(system, content, maxTokens){
+  const res = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'content-type':'application/json',
+      'x-api-key':getKey(),
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body:JSON.stringify({model:getModel(),max_tokens:maxTokens||2000,system,messages:[{role:'user',content}]})
+  });
+  const data = await res.json().catch(()=>null);
+  if(!res.ok) throw new Error((data&&data.error&&data.error.message)||('요청 실패 ('+res.status+')'));
+  return (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
+}
+function photoBlocks(){
+  return photos.map(p=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:p.data}}));
+}
+function loadPhotos(e){
+  const files=Array.from(e.target.files||[]).slice(0,6);
+  photos=[];
+  const thumbs=document.getElementById('an-thumbs'); thumbs.innerHTML='';
+  files.forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const max=1280, scale=Math.min(1,max/Math.max(img.width,img.height));
+        const cv=document.createElement('canvas');
+        cv.width=Math.round(img.width*scale); cv.height=Math.round(img.height*scale);
+        cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+        const url=cv.toDataURL('image/jpeg',0.85);
+        const entry={data:url.split(',')[1],name:file.name,blob:null};
+        photos.push(entry);
+        cv.toBlob(b=>{ entry.blob=b; },'image/jpeg',0.85);
+        const t=document.createElement('img');
+        t.src=url; t.alt=file.name; t.title=file.name;
+        t.style.cssText='width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb';
+        thumbs.appendChild(t);
+      };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function fillSample(){
+  document.getElementById('an-text').value =
+`[제안서 · 예시] 티링크 비즈레코딩은 휴대폰·인터넷전화·PC폰 통화를 한 서버에 함께 녹음합니다. 외근 중 휴대폰 통화도 사무실 통화와 같은 고객 이력에 쌓입니다.
+[매뉴얼 · 예시] 녹음된 통화는 STT로 받아쓴 뒤 AI가 통화요약을 만들고, 직원별 통계와 AI 종합리포트로 정리합니다.
+[제안서 · 예시] 녹취 파일은 AES256으로 암호화해 저장하고, 사용자별 접근권한으로 들을 수 있는 범위를 나눕니다.`;
+  toast('예시 자료를 넣었습니다');
+}
+function parseJsonArray(text){
+  const s=text.indexOf('['), e=text.lastIndexOf(']');
+  if(s<0||e<0) throw new Error('AI 응답을 카드로 읽지 못했습니다. 다시 시도해주세요.');
+  return JSON.parse(text.slice(s,e+1));
+}
+async function analyzeMaterials(){
+  const text=val('an-text');
+  if(!text && !photos.length){ toast('제품 정보나 사진을 먼저 넣어주세요'); return; }
+  if(!aiReady()){ toast('연결된 AI가 없습니다 — ⑤에서 API 키를 넣어주세요'); return; }
+  const btn=document.getElementById('an-btn'); btn.disabled=true; btn.textContent='분석 중…';
+  try{
+    const system='당신은 B2B 제품 마케팅 분석가입니다. 주어진 제품 자료와 사진에 실제로 있는 내용만 사용해, 기술적 차별점을 "기능 → 고객 이익 → 근거 자료" 메시지 카드로 정리합니다. 자료에 없는 수치·기능·사례는 절대 만들지 않습니다. 근거(evidence)에는 자료의 쪽수·문서명 또는 "사진 N번(무슨 화면인지)"처럼 출처 위치를 적습니다. 출력은 JSON 배열만: [{"feature":"...","benefit":"...","evidence":"..."}] 3~8개.';
+    const note=val('an-photo-note');
+    const ask='제품 자료:\n'+(text||'(없음)')+'\n\n사진 '+photos.length+'장'+(note?' — 사진 설명: '+note:'')+
+      '\n\n위 자료와 사진에서 고객이 관심을 가질 차별점을 메시지 카드로 정리해 주세요. 고객 이익은 영업사원 통화관리·콜센터 프로그램을 찾는 기업 관리자의 말로 써 주세요.';
+    const out=await askAI(system,ask,true,2000);
+    const arr=parseJsonArray(out).filter(c=>c&&c.feature&&c.benefit);
+    arr.forEach(c=>state.cards.push({id:cid(),feature:String(c.feature),benefit:String(c.benefit),evidence:String(c.evidence||'근거 확인 필요')}));
+    save(); render();
+    toast('메시지 카드 '+arr.length+'개를 만들었습니다');
+  }catch(err){ toast('분석 실패: '+err.message); }
+  finally{ btn.disabled=false; btn.textContent='AI로 차별점 분석'; }
+}
+const CHANNEL_SPEC={
+  blog:'네이버 블로그 리뷰 원고. 제목 1줄, 본문 800~1200자, 소제목 3~4개, 사진 넣을 자리는 [사진: 설명]으로 표시, 마지막에 해시태그 5~8개.',
+  short:'15~30초 숏폼 대본. 첫 3초 훅 → 문제 → 해결 → 근거 → 행동 유도 순서로, 줄마다 (화면: …) 연출과 내레이션·자막을 함께 적기.',
+  card:'카드뉴스 5~6장 문구. 카드마다 제목 1줄 + 본문 2줄 이내, 마지막 카드는 문의 안내.',
+  ad:'검색광고 문안 3세트. 세트마다 제목(15자 이내)과 설명(45자 이내).'
+};
+async function generateDraft(){
+  const channel=document.getElementById('ct-channel').value;
+  const picked = Array.from(document.querySelectorAll('.ct-pick:checked')).map(x=>x.value);
+  const cards = state.cards.filter(c=>picked.includes(c.id));
+  if(!cards.length){ toast('메시지 카드를 하나 이상 선택해주세요'); return; }
+  if(aiReady()){
+    const btn=document.getElementById('ct-btn'); btn.disabled=true; btn.textContent='작성 중…';
+    try{
+      const kw=val('gl-keywords');
+      const hl=document.getElementById('gl-highlights').value.trim();
+      const system='당신은 B2B 소프트웨어 홍보 콘텐츠 작가입니다. 아래 메시지 카드에 있는 사실만 사실로 씁니다. 카드에 없는 수치·기능·고객사례·순위·과장 표현("최고","유일","100%" 등)은 쓰지 않습니다. 필수 키워드는 모두 자연스럽게 넣고, 강조 내용은 카드로 뒷받침되는 것만 반영합니다. 마지막에 "문의: 홈페이지 상담신청 또는 대표번호"를 표기합니다. 설명 없이 원고만 출력합니다.';
+      const usePhotos=document.getElementById('ct-use-photos').checked && photos.length;
+      const ask='제품: 티링크 비즈레코딩\n형식: '+CHANNEL_SPEC[channel]+
+        '\n\n메시지 카드:\n'+cards.map((c,i)=>(i+1)+'. 기능: '+c.feature+' / 고객 이익: '+c.benefit+' / 근거: '+c.evidence).join('\n')+
+        '\n\n필수 키워드: '+kw+'\n강조 내용 후보:\n'+hl+
+        (usePhotos?'\n\n첨부한 사진 '+photos.length+'장에 보이는 화면·현장을 글 속 장면으로 활용해 주세요.':'');
+      const out=await askAI(system,ask,!!usePhotos,3000);
+      document.getElementById('ct-output').value=out;
+      runGuidelineCheck(out,cards);
+      toast('AI 초안을 만들었습니다');
+    }catch(err){ toast('생성 실패: '+err.message); }
+    finally{ btn.disabled=false; btn.textContent='AI 초안 생성'; }
+    return;
+  }
+  toast('예시 모드: 정해진 문구 틀로 만든 초안입니다');
+  let text='';
+  if(channel==='blog'){
+    text = `[티링크 비즈레코딩 살펴보기]\n\n업무용 통화가 많은 회사라면 눈여겨볼 티링크 비즈레코딩의 특징을 정리했습니다.\n\n`
+      + cards.map(c=>`▶ ${c.feature}\n${c.benefit}. (${c.evidence})`).join('\n\n')
+      + `\n\n통화요약부터 콜센터 프로그램 기능, 업무자동화까지 한 번에 이어지는 구조입니다.\n\n문의: 홈페이지 상담신청 또는 대표번호로 연락 주세요.`;
+  } else if(channel==='short'){
+    text = `[숏폼 대본 - 15~30초]\n\n(화면: 통화 목록) "하루에 전화만 몇 통이에요?"\n(화면: AI 요약 화면) "${cards[0].feature} 하나로 ${cards[0].benefit}"\n`
+      + cards.slice(1).map(c=>`(화면 전환) "${c.feature} → ${c.benefit}"`).join('\n')
+      + `\n(마무리, 로고) "통화요약 콜센터 프로그램, 업무자동화까지 — 티링크 비즈레코딩"\n자막: 홈페이지 상담신청 / 대표번호 안내`;
+  } else if(channel==='card'){
+    text = cards.map((c,i)=>`카드 ${i+1}\n${c.feature}\n${c.benefit}`).join('\n\n') + `\n\n마지막 카드\n문의: 홈페이지 상담신청 / 대표번호`;
+  } else {
+    text = `[검색광고 문안]\n헤드라인: ${cards[0].feature} | 티링크 비즈레코딩\n설명: ${cards[0].benefit} 통화요약·콜센터 프로그램·업무자동화까지 한 번에. 지금 상담신청.`;
+  }
+  document.getElementById('ct-output').value = text;
+  runGuidelineCheck(text, cards);
+}
+
+function runGuidelineCheck(text, cards){
+  const kw = val('gl-keywords').split(',').map(s=>s.trim()).filter(Boolean);
+  const hl = document.getElementById('gl-highlights').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  const kwHit = kw.filter(k=>text.includes(k));
+  const hlHit = hl.filter(h=> cards.some(c=>c.feature.includes(h)||h.includes(c.feature)) || text.includes(h));
+  const hasContact = /상담신청|대표번호|홈페이지/.test(text);
+  // 근거 없는 수치 경고: 텍스트에 등장하는 숫자(%나 배수 표현 등)가 카드 근거/기능/이익에 전혀 없으면 경고
+  const nums = (text.match(/\d+(\.\d+)?\s?(%|배|분|시간|건)/g)||[]);
+  const sourceText = cards.map(c=>c.feature+c.benefit+c.evidence).join(' ');
+  const unsupported = nums.filter(n=> !sourceText.includes(n));
+  let html = '<div class="stat">';
+  html += statBox(kwHit.length+'/'+kw.length,'필수 키워드 반영', kwHit.length===kw.length?'ok':'warn');
+  html += statBox(hlHit.length+'/'+hl.length,'강조 내용 반영', hlHit.length/Math.max(hl.length,1)>=0.5?'ok':'warn');
+  html += statBox(hasContact?'표기됨':'누락','문의 정보 표기', hasContact?'ok':'bad');
+  html += statBox(unsupported.length+'건','근거 없는 수치 의심', unsupported.length?'bad':'ok');
+  html += '</div>';
+  const missingKw = kw.filter(k=>!kwHit.includes(k));
+  const missingHl = hl.filter(h=>!hlHit.includes(h));
+  if(missingKw.length) html += `<p class="small">⚠ 누락된 필수 키워드: ${missingKw.map(esc).join(', ')}</p>`;
+  if(missingHl.length) html += `<p class="small">⚠ 반영되지 않은 강조 내용(일부): ${missingHl.slice(0,5).map(esc).join(', ')}${missingHl.length>5?' 외 '+(missingHl.length-5)+'건':''}</p>`;
+  if(unsupported.length) html += `<p class="small">⚠ 카드 근거에 없는 수치/표현: ${unsupported.map(esc).join(', ')} — 과장 표현일 수 있으니 확인 후 게시하세요.</p>`;
+  html += `<p class="small">※ 사람이 최종 검수한 뒤에만 게시하세요. 이 점검은 1차 자동 스크리닝입니다.</p>`;
+  document.getElementById('ct-check').innerHTML = html;
+}
+function statBox(v,l,cls){ return `<div class="box"><div class="v pill ${cls}" style="display:inline-block">${v}</div><div class="l">${l}</div></div>`; }
+
+function copyDraft(){
+  const t=document.getElementById('ct-output');
+  const done=()=>toast('복사했습니다');
+  const fallback=()=>{ t.select(); try{ document.execCommand('copy'); done(); }catch(e){ toast('복사하지 못했습니다 — 직접 선택해 복사해주세요'); } };
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t.value).then(done,fallback); else fallback();
+}
+
+function saveContent(){
+  const text = document.getElementById('ct-output').value;
+  if(!text.trim()){ toast('먼저 초안을 생성해주세요'); return; }
+  const channel = document.getElementById('ct-channel').value;
+  const campaign = val('ct-campaign') || '미지정 캠페인';
+  const picked = Array.from(document.querySelectorAll('.ct-pick:checked')).map(x=>x.value);
+  const id = cid();
+  const utm = `utm_source=tilink&utm_medium=${channel}&utm_campaign=${encodeURIComponent(campaign)}&utm_content=${id}`;
+  state.contents.push({id,channel,campaign,text,cardIds:picked,utm,createdAt:new Date().toISOString()});
+  state.kanban.push({id:cid(),contentId:id,title:CHANNEL_LABEL[channel]+' - '+campaign,campaign,channel,stage:'기획'});
+  if(!state.campaigns[campaign]) state.campaigns[campaign]={budget:0,impr:0,click:0};
+  save(); renderKanban(); renderContentCampaignSelects();
+  toast('콘텐츠를 등록하고 캠페인 보드로 보냈습니다 (UTM 발급: utm_content='+id+')');
+}
+
+function updateTimeStat(){
+  const b=parseFloat(document.getElementById('time-before').value)||0;
+  const a=parseFloat(document.getElementById('time-after').value)||0;
+  document.getElementById('time-saved').textContent = Math.max(b-a,0)+'분';
+  document.getElementById('time-pct').textContent = b? Math.round((b-a)/b*100)+'%' : '-';
+}
+['time-before','time-after'].forEach(id=>document.addEventListener('input',e=>{ if(e.target.id===id) updateTimeStat(); }));
+
+/* ---------- kanban ---------- */
+const STAGES=['기획','제작','검수','게시완료'];
+function addKanbanManual(){
+  const title=val('kb-title'); if(!title){ toast('제목을 입력해주세요'); return; }
+  const campaign=val('kb-campaign')||'미지정 캠페인';
+  const channel=document.getElementById('kb-channel').value;
+  state.kanban.push({id:cid(),contentId:null,title,campaign,channel,stage:'기획'});
+  if(!state.campaigns[campaign]) state.campaigns[campaign]={budget:0,impr:0,click:0};
+  document.getElementById('kb-title').value='';
+  save(); renderKanban(); renderContentCampaignSelects();
+}
+function moveKanban(id,dir){
+  const k=state.kanban.find(x=>x.id===id); if(!k) return;
+  const idx=STAGES.indexOf(k.stage);
+  const next=idx+dir;
+  if(next>=0 && next<STAGES.length){ k.stage=STAGES[next]; save(); renderKanban(); }
+}
+function deleteKanban(id){ state.kanban=state.kanban.filter(k=>k.id!==id); save(); renderKanban(); }
+
+function renderKanban(){
+  const box=document.getElementById('kanban');
+  box.innerHTML = STAGES.map(stage=>{
+    const items = state.kanban.filter(k=>k.stage===stage);
+    return `<div class="kcol"><h4>${stage} (${items.length})</h4>${
+      items.map(k=>{
+        const idx=STAGES.indexOf(k.stage);
+        return `<div class="kcard">
+          <div class="kt">${esc(k.title)}</div>
+          <div class="km">${esc(k.campaign)} · ${CHANNEL_LABEL[k.channel]||k.channel}</div>
+          <div class="kbtns">
+            ${idx>0?`<button onclick="moveKanban('${k.id}',-1)">◀ 이전</button>`:''}
+            ${idx<STAGES.length-1?`<button onclick="moveKanban('${k.id}',1)">다음 ▶</button>`:''}
+            <button onclick="deleteKanban('${k.id}')">삭제</button>
+          </div>
+        </div>`;
+      }).join('') || '<div class="empty" style="padding:6px">없음</div>'
+    }</div>`;
+  }).join('');
+}
+
+/* ---------- report ---------- */
+function renderContentCampaignSelects(){
+  const campaigns = Object.keys(state.campaigns);
+  const rpC = document.getElementById('rp-campaign');
+  rpC.innerHTML = campaigns.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('') || '<option value="">캠페인 없음</option>';
+  const iqUtm = document.getElementById('iq-utm');
+  iqUtm.innerHTML = '<option value="unknown">출처 미확인</option>' +
+    state.contents.map(c=>`<option value="${esc(c.utm)}">${esc(c.campaign)} / ${CHANNEL_LABEL[c.channel]} (utm_content=${c.id})</option>`).join('');
+  const iqContent = document.getElementById('iq-content');
+  iqContent.innerHTML = '<option value="">(선택 안 함)</option>' +
+    state.contents.map(c=>`<option value="${c.id}">${esc(c.campaign)} / ${CHANNEL_LABEL[c.channel]} / ${c.id}</option>`).join('');
+}
+function saveCampaignPerf(){
+  const name=document.getElementById('rp-campaign').value; if(!name){ toast('캠페인이 없습니다. 먼저 콘텐츠를 등록하세요'); return; }
+  state.campaigns[name] = {
+    budget: parseFloat(document.getElementById('rp-budget').value)||0,
+    impr: parseFloat(document.getElementById('rp-impr').value)||0,
+    click: parseFloat(document.getElementById('rp-click').value)||0
+  };
+  save(); renderReport();
+  toast('캠페인 성과를 저장했습니다');
+}
+function addInquiry(){
+  const date=document.getElementById('iq-date').value || new Date().toISOString().slice(0,10);
+  const utm=document.getElementById('iq-utm').value;
+  const contentId=document.getElementById('iq-content').value;
+  const note=val('iq-note');
+  state.inquiries.push({id:cid(),date,utm,contentId,note});
+  save(); renderReport();
+  toast('문의를 등록했습니다');
+}
+function campaignOfContent(contentId){
+  const c=state.contents.find(x=>x.id===contentId);
+  return c? c.campaign : null;
+}
+function renderReport(){
+  renderContentCampaignSelects();
+  const tbody=document.querySelector('#rp-table tbody');
+  const rows = Object.entries(state.campaigns).map(([name,perf])=>{
+    const contentIds = state.contents.filter(c=>c.campaign===name).map(c=>c.id);
+    const inquiryCount = state.inquiries.filter(iq=>contentIds.includes(iq.contentId)).length;
+    const channel = state.contents.find(c=>c.campaign===name)?.channel;
+    const cpi = inquiryCount? Math.round(perf.budget/inquiryCount) : (perf.budget? '∞' : '-');
+    const utmSample = state.contents.find(c=>c.campaign===name)?.utm || '-';
+    return {name,perf,channel,inquiryCount,cpi,utmSample};
+  });
+  tbody.innerHTML = rows.length ? rows.map(r=>`
+    <tr>
+      <td>${esc(r.name)}</td>
+      <td>${CHANNEL_LABEL[r.channel]||'-'}</td>
+      <td>${r.perf.budget.toLocaleString()}원</td>
+      <td>${r.perf.impr.toLocaleString()}</td>
+      <td>${r.perf.click.toLocaleString()}</td>
+      <td>${r.inquiryCount}</td>
+      <td><strong>${r.cpi===  '-' ? '-' : (r.cpi+(r.cpi==='∞'?'':'원'))}</strong></td>
+      <td class="small">${esc(r.utmSample)}</td>
+    </tr>`).join('') : `<tr><td colspan="8" class="empty">아직 캠페인 성과가 없습니다</td></tr>`;
+
+  // bars: cost per inquiry by channel (lower=better, shown as inverse length capped)
+  const byChannel = {};
+  rows.forEach(r=>{
+    if(typeof r.cpi==='number'){
+      byChannel[r.channel] = byChannel[r.channel]||[];
+      byChannel[r.channel].push(r.cpi);
+    }
+  });
+  const avg = Object.entries(byChannel).map(([ch,arr])=>({ch,v:arr.reduce((a,b)=>a+b,0)/arr.length}));
+  const maxV = Math.max(...avg.map(a=>a.v),1);
+  document.getElementById('rp-bars').innerHTML = avg.length ? avg.sort((a,b)=>a.v-b.v).map(a=>`
+    <div class="bar-wrap">
+      <div class="bar-label">${CHANNEL_LABEL[a.ch]||a.ch}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.max((a.v/maxV)*100,4)}%;background:${a.v===Math.min(...avg.map(x=>x.v))?'#1a9d6f':'#2f5dff'}"></div></div>
+      <div class="small">문의당 ${Math.round(a.v).toLocaleString()}원</div>
+    </div>`).join('') : '<div class="empty">문의 데이터가 쌓이면 채널별 효율을 비교해 보여줍니다.</div>';
+
+  document.getElementById('rp-unknown').textContent = state.inquiries.filter(iq=>iq.utm==='unknown').length;
+}
+
+function toCSV(rows){
+  return rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\n');
+}
+async function download(filename, text, mime){
+  if(saver){
+    try{ await saver.save({filename, data:(filename.endsWith('.csv')?'\ufeff':'')+text}); toast('파일을 저장했습니다'); }
+    catch(err){ toast(err&&err.code==='declined'?'저장을 취소했습니다':'이 화면에서는 파일 저장을 할 수 없습니다'); }
+    return;
+  }
+  if(filename.endsWith('.csv')) text='\ufeff'+text;
+  const blob = new Blob([text], {type:mime||'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function exportCampaignCSV(){
+  const rows=[['캠페인','채널','광고비','노출','클릭','문의수','문의1건당비용','UTM']];
+  Object.entries(state.campaigns).forEach(([name,perf])=>{
+    const contentIds = state.contents.filter(c=>c.campaign===name).map(c=>c.id);
+    const inquiryCount = state.inquiries.filter(iq=>contentIds.includes(iq.contentId)).length;
+    const channel = state.contents.find(c=>c.campaign===name)?.channel;
+    const cpi = inquiryCount? Math.round(perf.budget/inquiryCount) : '';
+    rows.push([name,CHANNEL_LABEL[channel]||'',perf.budget,perf.impr,perf.click,inquiryCount,cpi,state.contents.find(c=>c.campaign===name)?.utm||'']);
+  });
+  download('티링크_캠페인리포트.csv', toCSV(rows));
+}
+function exportInquiryCSV(){
+  const rows=[['날짜','유입경로(UTM)','연결콘텐츠ID','비고']];
+  state.inquiries.forEach(iq=>rows.push([iq.date, iq.utm, iq.contentId||'', iq.note||'']));
+  download('티링크_문의기록.csv', toCSV(rows));
+}
+
+/* ---------- backup ---------- */
+function backupJSON(){
+  download('티링크_데이터백업_'+new Date().toISOString().slice(0,10)+'.json', JSON.stringify(state,null,2), 'application/json');
+}
+function restoreJSON(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      state=Object.assign({cards:[],contents:[],kanban:[],campaigns:{},inquiries:[]},data);
+      save(); render();
+      toast('백업 데이터를 불러왔습니다');
+    }catch(err){ toast('파일을 읽지 못했습니다'); }
+  };
+  reader.readAsText(file);
+}
+function resetAll(){
+  if(!resetAll._armed){ resetAll._armed=true; toast('한 번 더 누르면 모든 데이터가 지워집니다'); setTimeout(()=>resetAll._armed=false,4000); return; }
+  resetAll._armed=false;
+  localStorage.removeItem(STORE_KEY);
+  state = {cards:[],contents:[],kanban:[],campaigns:{},inquiries:[]};
+  load();
+  toast('초기화했습니다');
+}
+
+/* ---------- utils ---------- */
+function esc(s){ return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function render(){
+  renderCards();
+  renderCardPicker();
+  renderKanban();
+  renderContentCampaignSelects();
+  renderReport();
+  updateTimeStat();
+  renderAiStatus();
+}
+load();
+</script>
+</body>
+</html>
